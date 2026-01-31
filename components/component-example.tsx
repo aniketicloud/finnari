@@ -1,11 +1,9 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 
-import {
-  Example,
-  ExampleWrapper,
-} from "@/components/example"
+import { Example, ExampleWrapper } from "@/components/example"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,7 +64,36 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { PlusSignIcon, BluetoothIcon, MoreVerticalCircle01Icon, FileIcon, FolderIcon, FolderOpenIcon, CodeIcon, MoreHorizontalCircle01Icon, SearchIcon, FloppyDiskIcon, DownloadIcon, EyeIcon, LayoutIcon, PaintBoardIcon, SunIcon, MoonIcon, ComputerIcon, UserIcon, CreditCardIcon, SettingsIcon, KeyboardIcon, LanguageCircleIcon, NotificationIcon, MailIcon, ShieldIcon, HelpCircleIcon, File01Icon, LogoutIcon } from "@hugeicons/core-free-icons"
+import {
+  PlusSignIcon,
+  BluetoothIcon,
+  MoreVerticalCircle01Icon,
+  FileIcon,
+  FolderIcon,
+  FolderOpenIcon,
+  CodeIcon,
+  MoreHorizontalCircle01Icon,
+  SearchIcon,
+  FloppyDiskIcon,
+  DownloadIcon,
+  EyeIcon,
+  LayoutIcon,
+  PaintBoardIcon,
+  SunIcon,
+  MoonIcon,
+  ComputerIcon,
+  UserIcon,
+  CreditCardIcon,
+  SettingsIcon,
+  KeyboardIcon,
+  LanguageCircleIcon,
+  NotificationIcon,
+  MailIcon,
+  ShieldIcon,
+  HelpCircleIcon,
+  File01Icon,
+  LogoutIcon,
+} from "@hugeicons/core-free-icons"
 
 export function ComponentExample() {
   return (
@@ -82,10 +109,12 @@ function CardExample() {
     <Example title="Card" className="items-center justify-center">
       <Card className="relative w-full max-w-sm overflow-hidden pt-0">
         <div className="bg-primary absolute inset-0 z-30 aspect-video opacity-50 mix-blend-color" />
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Photo by mymind on Unsplash"
           title="Photo by mymind on Unsplash"
+          width={1887}
+          height={1063}
           className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale"
         />
         <CardHeader>
@@ -100,7 +129,11 @@ function CardExample() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button>
-                <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} data-icon="inline-start" />
+                <HugeiconsIcon
+                  icon={PlusSignIcon}
+                  strokeWidth={2}
+                  data-icon="inline-start"
+                />
                 Show Dialog
               </Button>
             </AlertDialogTrigger>
@@ -156,7 +189,10 @@ function FormExample() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
-                  <HugeiconsIcon icon={MoreVerticalCircle01Icon} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={MoreVerticalCircle01Icon}
+                    strokeWidth={2}
+                  />
                   <span className="sr-only">More options</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -192,17 +228,26 @@ function FormExample() {
                           </DropdownMenuItem>
                           <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
-                              <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+                              <HugeiconsIcon
+                                icon={MoreHorizontalCircle01Icon}
+                                strokeWidth={2}
+                              />
                               More Projects
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
                               <DropdownMenuSubContent>
                                 <DropdownMenuItem>
-                                  <HugeiconsIcon icon={CodeIcon} strokeWidth={2} />
+                                  <HugeiconsIcon
+                                    icon={CodeIcon}
+                                    strokeWidth={2}
+                                  />
                                   Project Gamma
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                  <HugeiconsIcon icon={CodeIcon} strokeWidth={2} />
+                                  <HugeiconsIcon
+                                    icon={CodeIcon}
+                                    strokeWidth={2}
+                                  />
                                   Project Delta
                                 </DropdownMenuItem>
                               </DropdownMenuSubContent>
@@ -280,7 +325,10 @@ function FormExample() {
                               Dark
                             </DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="system">
-                              <HugeiconsIcon icon={ComputerIcon} strokeWidth={2} />
+                              <HugeiconsIcon
+                                icon={ComputerIcon}
+                                strokeWidth={2}
+                              />
                               System
                             </DropdownMenuRadioItem>
                           </DropdownMenuRadioGroup>
@@ -311,16 +359,25 @@ function FormExample() {
                         <DropdownMenuGroup>
                           <DropdownMenuLabel>Preferences</DropdownMenuLabel>
                           <DropdownMenuItem>
-                            <HugeiconsIcon icon={KeyboardIcon} strokeWidth={2} />
+                            <HugeiconsIcon
+                              icon={KeyboardIcon}
+                              strokeWidth={2}
+                            />
                             Keyboard Shortcuts
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <HugeiconsIcon icon={LanguageCircleIcon} strokeWidth={2} />
+                            <HugeiconsIcon
+                              icon={LanguageCircleIcon}
+                              strokeWidth={2}
+                            />
                             Language
                           </DropdownMenuItem>
                           <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
-                              <HugeiconsIcon icon={NotificationIcon} strokeWidth={2} />
+                              <HugeiconsIcon
+                                icon={NotificationIcon}
+                                strokeWidth={2}
+                              />
                               Notifications
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
@@ -338,7 +395,10 @@ function FormExample() {
                                       })
                                     }
                                   >
-                                    <HugeiconsIcon icon={NotificationIcon} strokeWidth={2} />
+                                    <HugeiconsIcon
+                                      icon={NotificationIcon}
+                                      strokeWidth={2}
+                                    />
                                     Push Notifications
                                   </DropdownMenuCheckboxItem>
                                   <DropdownMenuCheckboxItem
@@ -350,7 +410,10 @@ function FormExample() {
                                       })
                                     }
                                   >
-                                    <HugeiconsIcon icon={MailIcon} strokeWidth={2} />
+                                    <HugeiconsIcon
+                                      icon={MailIcon}
+                                      strokeWidth={2}
+                                    />
                                     Email Notifications
                                   </DropdownMenuCheckboxItem>
                                 </DropdownMenuGroup>
