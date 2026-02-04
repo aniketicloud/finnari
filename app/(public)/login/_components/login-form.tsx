@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
-import { useAsync } from "@/hooks/use-async"
+import { useState } from "react"
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -26,7 +26,8 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter()
-  const { isLoading, error, setError, execute } = useAsync()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const {
     register,
@@ -36,19 +37,30 @@ export function LoginForm({
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async (data: LoginFormData) => {
-    const result = await execute(async () => {
-      await authClient.signIn.email({
-        email: data.email,
-        password: data.password,
-      })
-    })
+  const onSubmit = async (formData: LoginFormData) => {
+    setIsLoading(true)
+    setError(null)
 
-    if (result !== undefined) {
-      router.push("/dashboard")
-    } else {
-      setError("Invalid email or password. Please try again.")
-    }
+    await authClient.signIn.email(
+      {
+        email: formData.email,
+        password: formData.password,
+        callbackURL: "/dashboard",
+        rememberMe: true,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard")
+        },
+        onError: (ctx) => {
+          setError(
+            ctx.error.message || "Invalid email or password. Please try again."
+          )
+        },
+      }
+    )
+
+    setIsLoading(false)
   }
 
   return (
