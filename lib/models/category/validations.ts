@@ -5,7 +5,10 @@ export const createCategorySchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
   parentCategoryId: z
     .string()
-    .regex(uuidRegex, "Invalid UUID")
+    .refine((val) => val === "" || uuidRegex.test(val), {
+      message: "Invalid UUID",
+    })
+    .transform((val) => (val === "" ? null : val))
     .nullable()
     .optional(),
 })
@@ -15,7 +18,10 @@ export const updateCategorySchema = z.object({
   name: z.string().min(1, "Name is required").max(255).optional(),
   parentCategoryId: z
     .string()
-    .regex(uuidRegex, "Invalid UUID")
+    .refine((val) => val === "" || uuidRegex.test(val), {
+      message: "Invalid UUID",
+    })
+    .transform((val) => (val === "" ? null : val))
     .nullable()
     .optional(),
 })
