@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   })
 
   if (!session) {
-    redirect("/sign-in")
+    redirect("/login")
   }
 
   return <h1>Welcome {session.user.name}</h1>

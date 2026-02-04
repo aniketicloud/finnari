@@ -12,11 +12,9 @@ export default function AuthLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col">
         <Header />
-        <main className="max-w-7xl mx-auto w-full p-6">
-          {children}
-        </main>
+        <main className="mx-auto w-full max-w-7xl p-6">{children}</main>
       </div>
     </SidebarProvider>
   )

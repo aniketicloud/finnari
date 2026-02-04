@@ -26,10 +26,13 @@ export const config = {
     /*
      * Match all request paths except:
      * - / (root)
+     * - /login (login page)
+     * - /signup (signup page)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - /api (API routes)
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api|login|signup).*)",
   ],
 }
