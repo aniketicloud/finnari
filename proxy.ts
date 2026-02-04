@@ -3,6 +3,10 @@ import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.next()
+  }
+
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -18,5 +22,14 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - / (root)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
 }
