@@ -5,9 +5,9 @@ export const createCategorySchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
   parentCategoryId: z
     .string()
-    .regex(uuidRegex, "Invalid UUID")
-    .nullable()
-    .optional(),
+    .optional()
+    .transform((val) => (val === "" ? undefined : val))
+    .pipe(z.string().regex(uuidRegex, "Invalid UUID").optional()),
 })
 
 export const updateCategorySchema = z.object({
@@ -15,9 +15,9 @@ export const updateCategorySchema = z.object({
   name: z.string().min(1, "Name is required").max(255).optional(),
   parentCategoryId: z
     .string()
-    .regex(uuidRegex, "Invalid UUID")
-    .nullable()
-    .optional(),
+    .optional()
+    .transform((val) => (val === "" ? undefined : val))
+    .pipe(z.string().regex(uuidRegex, "Invalid UUID").optional()),
 })
 
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>
