@@ -20,5 +20,5 @@ export const auth = betterAuth({
   rateLimit: {
     storage: "database",
   },
-  plugins: [nextCookies()], // make sure this is the last plugin in the array
+  plugins: [nextCookies()], // make sure This is the last plugin in the array
 })
