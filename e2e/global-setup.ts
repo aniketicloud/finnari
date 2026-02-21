@@ -35,7 +35,7 @@ async function globalSetup(config: FullConfig) {
 
     const testEmail = process.env.TEST_USER_EMAIL || 'testuser@example.com'
     const testPassword = process.env.TEST_USER_PASSWORD || 'Test123Password!'
-    const baseURL = process.env.BETTER_AUTH_URL || 'http://localhost:3000'
+    const baseURL = process.env.BETTER_AUTH_URL || 'http://localhost:3002'
 
     console.log(`📍 Navigating to ${baseURL}/login`)
     await page.goto(`${baseURL}/login`)

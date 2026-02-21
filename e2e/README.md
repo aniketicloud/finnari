@@ -405,8 +405,8 @@ docker exec -it finnari-db-test-1 psql -U postgres -d finnari-test -c "SELECT 1"
 **Solution:**
 ```bash
 # Check if port 3000 is available
-netstat -ano | findstr :3000  # Windows
-lsof -i :3000                 # Mac/Linux
+netstat -ano | findstr :3002  # Windows
+lsof -i :3002                 # Mac/Linux
 
 # Manually start dev server to check for errors
 npm run dev
@@ -484,7 +484,7 @@ Key settings in `playwright.config.ts`:
   fullyParallel: false,                // Serial execution
   workers: 1,                          // Single worker
   use: {
-    baseURL: 'http://localhost:3000',  // App URL
+    baseURL: 'http://localhost:3002',  // App URL
     storageState: 'playwright/.auth/user.json',  // Auth state
     screenshot: 'only-on-failure',     // Debug screenshots
   },
@@ -497,7 +497,7 @@ Key settings in `playwright.config.ts`:
   ],
   webServer: {
     command: 'npm run dev',            // Start dev server
-    url: 'http://localhost:3000',
+    url: 'http://localhost:3002',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {                             // Test env vars
@@ -515,7 +515,7 @@ Key settings in `playwright.config.ts`:
 ```env
 DATABASE_URL=postgresql://postgres:password@localhost:5437/finnari-test
 BETTER_AUTH_SECRET=i4ddatGJkjrO0jRtpZO30tqwfFuvN5BC
-BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_URL=http://localhost:3002
 TEST_USER_EMAIL=testuser@example.com
 TEST_USER_PASSWORD=Test123Password!
 ```

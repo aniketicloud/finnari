@@ -161,7 +161,7 @@ test.describe('Logout Tests', () => {
       })
 
       // Should be on login or public page
-      const isPublicPage = page.url().includes('/login') || page.url() === 'http://localhost:3000/'
+      const isPublicPage = page.url().includes('/login') || page.url() === 'http://localhost:3002/'
 
       expect(isPublicPage).toBe(true)
 

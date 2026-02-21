@@ -5,7 +5,7 @@
 DATABASE_URL=postgresql://postgres:password@localhost:5436/finnari-v0 
 
 BETTER_AUTH_SECRET=randomly generated secure token
-BETTER_AUTH_URL=http://localhost:3000 # Base URL of your app
+BETTER_AUTH_URL=http://localhost:3002 # Base URL of your app
 
 DB_HOST=localhost
 DB_HOST_PORT=5436
