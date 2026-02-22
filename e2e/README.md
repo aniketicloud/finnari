@@ -64,7 +64,7 @@ This will:
 2. Run migrations
 3. Seed test user (`testuser@example.com`)
 4. Automate login and save auth state
-5. Execute all tests across 3 browsers
+5. Execute all tests across chromium browser
 6. Generate HTML report
 
 ### 3. View Test Report

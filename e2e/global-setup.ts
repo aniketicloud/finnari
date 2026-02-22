@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import path from 'path'
-import { chromium, FullConfig } from '@playwright/test'
+import fs from 'fs'
+import { chromium, request, FullConfig } from '@playwright/test'
 import { setupTestDatabase } from './db-setup'
 
 // Load .env.test environment variables
@@ -8,10 +9,10 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.test') })
 
 /**
  * Global setup runs once before all tests.
- * 
+ *
  * This function:
  * 1. Prepares the test database with fresh schema and seeded test user
- * 2. Authenticates via the login UI to generate valid session state
+ * 2. Authenticates directly via the better-auth API (no browser UI needed)
  * 3. Saves authentication state so tests can reuse it without re-logging in
  */
 async function globalSetup(config: FullConfig) {
@@ -25,65 +26,53 @@ async function globalSetup(config: FullConfig) {
     console.log('─'.repeat(40))
     await setupTestDatabase()
 
-    // Step 2: Generate authentication state by logging in
+    // Step 2: Generate authentication state by calling the auth API directly
+    // This is more reliable than driving the login UI and avoids any UI-related flakiness.
     console.log('\nSTEP 2: Generating authentication state')
     console.log('─'.repeat(40))
-
-    const browser = await chromium.launch()
-    const context = await browser.newContext()
-    const page = await context.newPage()
 
     const testEmail = process.env.TEST_USER_EMAIL || 'testuser@example.com'
     const testPassword = process.env.TEST_USER_PASSWORD || 'Test123Password!'
     const baseURL = process.env.BETTER_AUTH_URL || 'http://localhost:3002'
 
-    console.log(`📍 Navigating to ${baseURL}/login`)
-    await page.goto(`${baseURL}/login`)
+    console.log(`🔑 Signing in as ${testEmail} via API...`)
 
-    // Wait for login form to be ready
-    await page.waitForLoadState('networkidle')
+    // Use Playwright's request context to POST directly to the sign-in endpoint
+    const requestContext = await request.newContext({ baseURL })
 
-    // Fill in email field
-    console.log(`📧 Entering email: ${testEmail}`)
-    const emailInput = page.locator('input[type="email"]')
-    await emailInput.fill(testEmail)
-
-    // Fill in password field
-    console.log('🔐 Entering password')
-    const passwordInput = page.locator('input[type="password"]')
-    await passwordInput.fill(testPassword)
-
-    // Submit login form
-    console.log('✋ Submitting login form')
-    const submitButton = page.locator('button[type="submit"]')
-    await submitButton.click()
-
-    // Wait for successful authentication redirect
-    // The app should redirect from /login to /dashboard or home page
-    console.log('⏳ Waiting for authentication...')
-    await page.waitForURL('**/dashboard/**', { timeout: 30000 }).catch(() => {
-      // If dashboard redirect fails, try waiting for any navigation away from login
-      return page.goto(`${baseURL}/dashboard`, { waitUntil: 'networkidle' })
+    const response = await requestContext.post('/api/auth/sign-in/email', {
+      data: {
+        email: testEmail,
+        password: testPassword,
+        rememberMe: true,
+      },
     })
 
-    console.log('✅ Login successful, user authenticated')
+    if (!response.ok()) {
+      const body = await response.text()
+      throw new Error(`Sign-in API returned ${response.status()}: ${body}`)
+    }
 
-    // Step 3: Save authentication state
+    console.log(`✅ API sign-in successful (HTTP ${response.status()})`)
+
+    // Step 3: Save authentication state (cookies from the API response)
     console.log('\nSTEP 3: Saving authentication state')
     console.log('─'.repeat(40))
 
     const authDir = path.join(__dirname, '../playwright/.auth')
     const authFile = path.join(authDir, 'user.json')
 
-    // Save both cookies and localStorage for comprehensive session persistence
-    const storageState = await context.storageState({ path: authFile })
+    // Ensure the .auth directory exists before writing
+    fs.mkdirSync(authDir, { recursive: true })
+
+    // Save cookies captured during the API sign-in
+    const storageState = await requestContext.storageState({ path: authFile })
 
     console.log(`💾 Saved authentication state to: ${authFile}`)
     console.log(`   - Cookies: ${storageState.cookies.length}`)
     console.log(`   - LocalStorage: ${storageState.origins.length} origins`)
 
-    // Cleanup
-    await browser.close()
+    await requestContext.dispose()
 
     console.log('\n========================================')
     console.log('✅ GLOBAL SETUP COMPLETED SUCCESSFULLY')
