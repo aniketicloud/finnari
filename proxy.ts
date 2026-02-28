@@ -33,6 +33,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - /api (API routes)
      */
-    "/((?!_next/static|_next/image|favicon.ico|api|login|signup).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api|login|signup|wfh-calculator).*)",
   ],
 }
