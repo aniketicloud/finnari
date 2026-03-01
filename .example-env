@@ -13,3 +13,10 @@ DB_CONTAINER_PORT=5432
 DB_PASSWORD=password
 DB_USER=postgres
 DB_NAME=finnari-v0
+
+# Backblaze B2 Cloud Storage Configuration
+BACKBLAZE_ENDPOINT=https://s3.us-west-004.backblaze.com
+BACKBLAZE_REGION=us-west-004
+BACKBLAZE_KEY_ID=your_keyID_here
+BACKBLAZE_APP_KEY=your_applicationKey_here
+BACKBLAZE_BUCKET_NAME=your_bucket_name
