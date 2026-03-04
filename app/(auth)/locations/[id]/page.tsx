@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons"
+import { DeleteLocationButton } from "../_components/delete-location-button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
@@ -37,6 +38,12 @@ export default async function LocationDetailPage({
         <div className="flex-1">
           <h1 className="text-3xl font-bold">{location.name}</h1>
           <p className="text-muted-foreground">Location details</p>
+        </div>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/locations/${id}/edit`}>Edit</Link>
+          </Button>
+          <DeleteLocationButton id={id} redirectTo="/locations" />
         </div>
       </div>
 

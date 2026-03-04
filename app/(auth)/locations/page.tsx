@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Add01Icon } from "@hugeicons/core-free-icons"
+import { DeleteLocationButton } from "./_components/delete-location-button"
 import {
   Table,
   TableBody,
@@ -59,9 +60,17 @@ export default async function LocationsPage() {
                     {new Date(location.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href={`/locations/${location.id}`}>View</Link>
-                    </Button>
+                    <div className="flex justify-end gap-2">
+                      <Button asChild variant="ghost" size="sm">
+                        <Link href={`/locations/${location.id}`}>View</Link>
+                      </Button>
+                      <Button asChild variant="outline" size="sm">
+                        <Link href={`/locations/${location.id}/edit`}>
+                          Edit
+                        </Link>
+                      </Button>
+                      <DeleteLocationButton id={location.id} />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
