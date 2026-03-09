@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     })
   )
 
-  //   const fileUrl = `${process.env.BACKBLAZE_ENDPOINT}/${process.env.BACKBLAZE_BUCKET_NAME}/${fileName}`
+  //   const fileUrl = `${process.env.BACKBLAZE_ENDPOINT}/${process.env.BACKBLAZE_BUCKET_NAME}/${fileName}`;
 
   return NextResponse.json({ key: fileName })
 }
