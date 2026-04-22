@@ -23,4 +23,5 @@ export const wfhSchema = z.object({
     .int()
     .min(0, "Must be 0 or more")
     .max(59, "Must be 59 or less"),
+  placementPreference: z.enum(["auto", "before", "after"]),
 })

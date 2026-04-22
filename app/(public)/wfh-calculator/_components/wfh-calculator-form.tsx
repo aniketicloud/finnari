@@ -12,8 +12,15 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { wfhSchema } from "../validations/wfh-validation"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useState } from "react"
@@ -55,6 +62,10 @@ function padNum(n: number) {
   return n.toString().padStart(2, "0")
 }
 
+function formatMinutesToDuration(minutes: number) {
+  return `${Math.floor(minutes / 60)}h ${padNum(minutes % 60)}m`
+}
+
 export function WfhCalculatorForm({
   className,
   ...props
@@ -65,6 +76,7 @@ export function WfhCalculatorForm({
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors },
   } = useForm<WfhFormData>({
     resolver: zodResolver(wfhSchema),
@@ -75,6 +87,7 @@ export function WfhCalculatorForm({
       totalMinutes: 15,
       gapHours: 0,
       gapMinutes: 20,
+      placementPreference: "auto",
     },
   })
 
@@ -122,16 +135,41 @@ export function WfhCalculatorForm({
     let wfhToMin: number
     let placement: "before" | "after"
 
-    if (availableBefore >= remaining && availableBefore >= availableAfter) {
-      // Place WFH BEFORE office
+    const pref = data.placementPreference
+
+    if (pref === "before") {
+      if (availableBefore < remaining) {
+        setError("root", {
+          message: `Not enough time before office hours. Available: ${formatMinutesToDuration(availableBefore)}, Required: ${formatMinutesToDuration(remaining)}.`,
+        })
+        setResult(null)
+        return
+      }
       placement = "before"
       wfhToMin = officeStartMin - gap
       wfhFromMin = wfhToMin - remaining
-    } else {
-      // Place WFH AFTER office
+    } else if (pref === "after") {
+      if (availableAfter < remaining) {
+        setError("root", {
+          message: `Not enough time after office hours. Available: ${formatMinutesToDuration(availableAfter)}, Required: ${formatMinutesToDuration(remaining)}.`,
+        })
+        setResult(null)
+        return
+      }
       placement = "after"
       wfhFromMin = officeEndMin + gap
       wfhToMin = wfhFromMin + remaining
+    } else {
+      // Auto: pick the side with more available space (prefers before when equal)
+      if (availableBefore >= remaining && availableBefore >= availableAfter) {
+        placement = "before"
+        wfhToMin = officeStartMin - gap
+        wfhFromMin = wfhToMin - remaining
+      } else {
+        placement = "after"
+        wfhFromMin = officeEndMin + gap
+        wfhToMin = wfhFromMin + remaining
+      }
     }
 
     // Compute two alternate combinations with +10 and +20 min gap
@@ -317,7 +355,50 @@ export function WfhCalculatorForm({
                 </div>
               </div>
 
+              <Separator />
+
+              {/* WFH Placement Preference */}
+              <div>
+                <p className="mb-1 text-sm font-medium">WFH Placement</p>
+                <p className="text-muted-foreground mb-2 text-xs">
+                  Choose where to schedule your WFH hours relative to office
+                  hours
+                </p>
+                <Controller
+                  control={control}
+                  name="placementPreference"
+                  render={({ field }) => (
+                    <Field>
+                      <FieldLabel htmlFor="placementPreference">
+                        Placement
+                      </FieldLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          id="placementPreference"
+                          className="w-full"
+                        >
+                          <SelectValue placeholder="Select placement" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="auto">Auto</SelectItem>
+                          <SelectItem value="before">Before Time In</SelectItem>
+                          <SelectItem value="after">After Time Out</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                  )}
+                />
+              </div>
+
               <Field>
+                {errors.root && (
+                  <p className="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
+                    {errors.root.message}
+                  </p>
+                )}
                 <Button type="submit" className="w-full">
                   Calculate WFH Time
                 </Button>
